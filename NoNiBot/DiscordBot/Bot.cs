@@ -115,13 +115,7 @@ namespace NoNiDev.NoNiBot.DiscordBot
                 .AddOption("config", ApplicationCommandOptionType.Attachment, "Le fichier de config", isRequired: true);
 
 
-            if (_client is null)
-            {
-                Console.WriteLine("Erreur : Le client Discord n'est pas initialisé !");
-                return;
-            }
-
-            await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand.Build());
+            
             // Exemple de commande supplémentaire (non implémentée pour l'instant)
             var guildCommand2 = new SlashCommandBuilder()
                 .WithName("add-archipel")
@@ -131,19 +125,26 @@ namespace NoNiDev.NoNiBot.DiscordBot
                 .AddOption("url", ApplicationCommandOptionType.String, "lL'url de la room", isRequired: true)
                 .AddOption("config", ApplicationCommandOptionType.Attachment, "Le fichier de config", isRequired: true);
 
+            var guildCommand3 = new SlashCommandBuilder()
+                .WithName("keepelago-link")
+                .WithDescription("Affiche le lien vers le client Keepelago");
 
+
+            /* On ajoute les commandes au serveur. Note : on pourrait aussi les ajouter globalement, mais ça prendrait plus de temps à se propager (jusqu'à 1h), alors que là c'est instantané pour le serveur ciblé. */
             if (_client is null)
             {
                 Console.WriteLine("Erreur : Le client Discord n'est pas initialisé !");
                 return;
             }
 
+            await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand.Build());
             await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand2.Build());
+            await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand3.Build());
         }
 
         private async Task SlashCommandHandler(SocketSlashCommand command)
         {
-            if (command.Data.Name != "parse" && command.Data.Name != "add-archipel")
+            if (command.Data.Name != "parse" && command.Data.Name != "add-archipel" && command.Data.Name != "keepelago-link")
                 return;
 
             await command.DeferAsync();
@@ -160,6 +161,12 @@ namespace NoNiDev.NoNiBot.DiscordBot
                     _ = Task.Run(async () =>
                     {
                         await HandleCreateArchCommandAsync(command);
+                    });
+                    break;
+                case "keepelago-link":
+                    _ = Task.Run(async () =>
+                    {
+                        await GenericCommand.HandleGetKeepelagoLink(command);
                     });
                     break;
                 default:
