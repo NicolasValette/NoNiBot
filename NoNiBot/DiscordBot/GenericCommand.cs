@@ -15,7 +15,7 @@ namespace NoNiDev.NoNiBot.DiscordBot
             Embed msg = new EmbedBuilder()
                 .WithTitle("Keepelago Link")
                 .WithDescription($"Retrouve le client KEEPELAGO ici : \n\n{KEEPELAGO_LINK}")
-                .WithFooter("NoNiBot a vorte servide")
+                .WithFooter("NoNiBot à votre service")
                 .WithColor(Color.Purple)
                 .Build();
             await command.FollowupAsync(embed: msg);
