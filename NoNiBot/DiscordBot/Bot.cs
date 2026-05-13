@@ -129,6 +129,16 @@ namespace NoNiDev.NoNiBot.DiscordBot
                 .WithName("keepelago-link")
                 .WithDescription("Affiche le lien vers le client Keepelago");
 
+            var guildCommand4 = new SlashCommandBuilder()
+                .WithName("roll")
+                .WithDescription("Lance X dés a N face")
+                .AddOption("face", ApplicationCommandOptionType.Integer, "Nombre de face du dé", isRequired: true)
+                .AddOption("dices", ApplicationCommandOptionType.Integer, "Nombre de dés à lancer", isRequired: true);
+
+            var guildCommand5 = new SlashCommandBuilder()
+               .WithName("roll6")
+               .WithDescription("Lance 1 d6");
+
 
             /* On ajoute les commandes au serveur. Note : on pourrait aussi les ajouter globalement, mais ça prendrait plus de temps à se propager (jusqu'à 1h), alors que là c'est instantané pour le serveur ciblé. */
             if (_client is null)
@@ -140,11 +150,14 @@ namespace NoNiDev.NoNiBot.DiscordBot
             await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand.Build());
             await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand2.Build());
             await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand3.Build());
+            await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand4.Build());
+            await _client.GetGuild(channelId).CreateApplicationCommandAsync(guildCommand5.Build());
+
         }
 
         private async Task SlashCommandHandler(SocketSlashCommand command)
         {
-            if (command.Data.Name != "parse" && command.Data.Name != "add-archipel" && command.Data.Name != "keepelago-link")
+            if (command.Data.Name != "parse" && command.Data.Name != "add-archipel" && command.Data.Name != "keepelago-link" && command.Data.Name != "roll" && command.Data.Name != "roll6")
                 return;
 
             await command.DeferAsync();
@@ -167,6 +180,18 @@ namespace NoNiDev.NoNiBot.DiscordBot
                     _ = Task.Run(async () =>
                     {
                         await GenericCommand.HandleGetKeepelagoLink(command);
+                    });
+                    break;
+                case "roll":
+                    _ = Task.Run(async () =>
+                    {
+                        await GenericCommand.HandleRoll(command);
+                    });
+                    break;
+                case "roll6":
+                    _ = Task.Run(async () =>
+                    {
+                        await GenericCommand.HandleRoll6(command);
                     });
                     break;
                 default:
