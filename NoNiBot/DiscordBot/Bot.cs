@@ -132,8 +132,8 @@ namespace NoNiDev.NoNiBot.DiscordBot
             var guildCommand4 = new SlashCommandBuilder()
                 .WithName("roll")
                 .WithDescription("Lance X dés a N face")
-                .AddOption("face", ApplicationCommandOptionType.Integer, "Nombre de face du dé", isRequired: true)
-                .AddOption("dices", ApplicationCommandOptionType.Integer, "Nombre de dés à lancer", isRequired: true);
+                .AddOption("dices", ApplicationCommandOptionType.Integer, "Nombre de dés à lancer", isRequired: true)
+                .AddOption("face", ApplicationCommandOptionType.Integer, "Nombre de face du dé", isRequired: true);
 
             var guildCommand5 = new SlashCommandBuilder()
                .WithName("roll6")

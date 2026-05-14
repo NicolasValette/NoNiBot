@@ -75,7 +75,7 @@ namespace NoNiDev.NoNiBot.DiscordBot
                     rolls.Add(value);
                 }
                 StringBuilder strb = new();
-                strb.AppendLine($"Résultats du {nbDice}D{face}");
+                strb.AppendLine($"Résultats du {nbDice}D{face} :game_die:");
                 strb.AppendLine();
                 strb.Append($"[{ string.Join(", ", rolls)}]");
                 strb.AppendLine();
