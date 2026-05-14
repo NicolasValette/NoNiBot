@@ -1,5 +1,6 @@
 using Discord;
 using Discord.WebSocket;
+using System.Text;
 
 namespace NoNiDev.NoNiBot.DiscordBot
 {
@@ -32,8 +33,8 @@ namespace NoNiDev.NoNiBot.DiscordBot
             {
                 int roll = _rand.Next(1, 7);
                 Embed msg = new EmbedBuilder()
-                    .WithTitle("Lancement des dès")
-                    .WithDescription($"Résultats du lancé \n [{roll}]")
+                    .WithTitle("Lancement du dès")
+                    .WithDescription($":game_die: => [{roll}]")
                     .WithFooter("NoNiBot à votre service")
                     .WithColor(Color.Blue)
                     .Build();
@@ -66,14 +67,29 @@ namespace NoNiDev.NoNiBot.DiscordBot
                     return;
                 }
                 List<int> rolls = new List<int>();
+                int[] valuesSum = new int[face];
                 for (int i = 0; i < nbDice; i++)
                 {
-                    rolls.Add(_rand.Next(1, face + 1));
+                    int value = _rand.Next(1, face + 1);
+                    valuesSum[value - 1]++;
+                    rolls.Add(value);
                 }
-
+                StringBuilder strb = new();
+                strb.AppendLine($"Résultats du {nbDice}D{face} :game_die:");
+                strb.AppendLine();
+                strb.Append($"[{ string.Join(", ", rolls)}]");
+                strb.AppendLine();
+                strb.AppendLine();
+                strb.AppendLine("Tableau de résultats par face : ");
+                for (int i = 0; i < valuesSum.Length; i++)
+                {
+                    strb.AppendLine($"Face [{i+1}] => {valuesSum[i]}");
+                }
+                strb.AppendLine();
+                strb.AppendLine($"Somme de tout les dés : {rolls.Sum()}");
                 Embed msg = new EmbedBuilder()
                     .WithTitle("Lancement des dès")
-                    .WithDescription($"Résultats du {nbDice}D{face} \n [{string.Join(", ", rolls)}]")
+                    .WithDescription(strb.ToString())
                     .WithFooter("NoNiBot à votre service")
                     .WithColor(Color.DarkBlue)
                     .Build();
